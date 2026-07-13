@@ -4,8 +4,9 @@ import "./App.css";
 function App() {
   const [task, setTask] = useState("");
   const [todos, setTodos] = useState([]);
+  const [editId, setEditId] = useState(null);
 
-  // Load todos from backend
+  // Load Todos
   useEffect(() => {
     fetch("http://localhost:5000/todos")
       .then((res) => res.json())
@@ -13,22 +14,45 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  // Add Todo
+  // Add or Edit Todo
   const addTodo = async () => {
     if (task.trim() === "") return;
 
     try {
-      const res = await fetch("http://localhost:5000/todos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ task }),
-      });
+      if (editId) {
+        // Update Todo
+        const res = await fetch(`http://localhost:5000/todos/${editId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ task }),
+        });
 
-      const newTodo = await res.json();
+        const updatedTodo = await res.json();
 
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
+        setTodos(
+          todos.map((todo) =>
+            todo._id === editId ? updatedTodo : todo
+          )
+        );
+
+        setEditId(null);
+      } else {
+        // Add Todo
+        const res = await fetch("http://localhost:5000/todos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ task }),
+        });
+
+        const newTodo = await res.json();
+
+        setTodos([...todos, newTodo]);
+      }
+
       setTask("");
     } catch (err) {
       console.log(err);
@@ -42,9 +66,7 @@ function App() {
         method: "DELETE",
       });
 
-      setTodos((prevTodos) =>
-        prevTodos.filter((todo) => todo._id !== id)
-      );
+      setTodos(todos.filter((todo) => todo._id !== id));
     } catch (err) {
       console.log(err);
     }
@@ -62,13 +84,25 @@ function App() {
           onChange={(e) => setTask(e.target.value)}
         />
 
-        <button onClick={addTodo}>Add</button>
+        <button onClick={addTodo}>
+          {editId ? "Update" : "Add"}
+        </button>
       </div>
 
       <ul>
         {todos.map((todo) => (
           <li key={todo._id}>
             {todo.task}
+
+            <button
+              onClick={() => {
+                setTask(todo.task);
+                setEditId(todo._id);
+              }}
+            >
+              Edit
+            </button>
+
             <button onClick={() => deleteTodo(todo._id)}>
               Delete
             </button>

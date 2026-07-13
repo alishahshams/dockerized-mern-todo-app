@@ -52,6 +52,25 @@ app.post("/todos", async (req, res) => {
 });
 
 // =====================
+// UPDATE TODO
+// =====================
+app.put("/todos/:id", async (req, res) => {
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      {
+        task: req.body.task,
+      },
+      { new: true }
+    );
+
+    res.json(updatedTodo);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// =====================
 // DELETE TODO
 // =====================
 app.delete("/todos/:id", async (req, res) => {
