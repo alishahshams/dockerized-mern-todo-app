@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [todos, setTodos] = useState([]);
   const [editId, setEditId] = useState(null);
 
@@ -27,18 +28,19 @@ function App() {
 
     try {
       if (editId) {
-        const res = await fetch(
-          `http://localhost:5000/todos/${editId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              task: task,
-            }),
-          }
-        );
+        const oldTodo = todos.find((t) => t._id === editId);
+
+        const res = await fetch(`http://localhost:5000/todos/${editId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task,
+            completed: oldTodo.completed,
+            dueDate,
+          }),
+        });
 
         const updatedTodo = await res.json();
 
@@ -49,156 +51,133 @@ function App() {
         );
 
         setEditId(null);
-
       } else {
-        const res = await fetch(
-          "http://localhost:5000/todos",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              task: task,
-            }),
-          }
-        );
-
-        const newTodo = await res.json();
-
-        setTodos([...todos, newTodo]);
-      }
-
-      setTask("");
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
-  // Complete Task
-  const toggleComplete = async (id, completed) => {
-    try {
-      const res = await fetch(
-        `http://localhost:5000/todos/${id}`,
-        {
-          method: "PUT",
+        const res = await fetch("http://localhost:5000/todos", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            completed: !completed,
+            task,
+            dueDate,
           }),
-        }
-      );
+        });
+
+        const newTodo = await res.json();
+        setTodos([...todos, newTodo]);
+      }
+
+      setTask("");
+      setDueDate("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Complete Task
+  const toggleComplete = async (todo) => {
+    try {
+      const res = await fetch(`http://localhost:5000/todos/${todo._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          task: todo.task,
+          completed: !todo.completed,
+          dueDate: todo.dueDate,
+        }),
+      });
 
       const updatedTodo = await res.json();
 
       setTodos(
-        todos.map((todo) =>
-          todo._id === id ? updatedTodo : todo
+        todos.map((t) =>
+          t._id === todo._id ? updatedTodo : t
         )
       );
-
     } catch (err) {
       console.log(err);
     }
   };
-
 
   // Delete Todo
   const deleteTodo = async (id) => {
     try {
-      await fetch(
-        `http://localhost:5000/todos/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await fetch(`http://localhost:5000/todos/${id}`, {
+        method: "DELETE",
+      });
 
-      setTodos(
-        todos.filter((todo) => todo._id !== id)
-      );
-
+      setTodos(todos.filter((todo) => todo._id !== id));
     } catch (err) {
       console.log(err);
     }
   };
 
-
   return (
-    <div className="App">
-
+    <div className="container">
       <h1>Dockerized MERN Todo App</h1>
 
       <div className="input-box">
-
         <input
           type="text"
           placeholder="Enter Task"
           value={task}
-          onChange={(e) =>
-            setTask(e.target.value)
-          }
+          onChange={(e) => setTask(e.target.value)}
+        />
+
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
         />
 
         <button onClick={addTodo}>
           {editId ? "Update" : "Add"}
         </button>
-
       </div>
-
 
       <ul>
         {todos.map((todo) => (
-
           <li key={todo._id}>
-
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={() =>
-                toggleComplete(
-                  todo._id,
-                  todo.completed
-                )
-              }
+              onChange={() => toggleComplete(todo)}
             />
 
+            <div style={{ flex: 1 }}>
+              <span className={todo.completed ? "completed" : ""}>
+                {todo.task}
+              </span>
 
-            <span
-              className={
-                todo.completed ? "completed" : ""
-              }
-            >
-              {todo.task}
-            </span>
-
+              {todo.dueDate && (
+                <div style={{ fontSize: "12px", color: "gray" }}>
+                  Due: {new Date(todo.dueDate).toLocaleDateString()}
+                </div>
+              )}
+            </div>
 
             <button
               onClick={() => {
                 setTask(todo.task);
+                setDueDate(
+                  todo.dueDate
+                    ? new Date(todo.dueDate).toISOString().split("T")[0]
+                    : ""
+                );
                 setEditId(todo._id);
               }}
             >
               Edit
             </button>
 
-
-            <button
-              onClick={() =>
-                deleteTodo(todo._id)
-              }
-            >
+            <button onClick={() => deleteTodo(todo._id)}>
               Delete
             </button>
-
           </li>
-
         ))}
       </ul>
-
     </div>
   );
 }

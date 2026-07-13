@@ -42,18 +42,19 @@ app.post("/todos", async (req, res) => {
   try {
     const newTodo = new Todo({
       task: req.body.task,
+      completed: req.body.completed || false,
+      dueDate: req.body.dueDate || null,
     });
 
     const savedTodo = await newTodo.save();
     res.json(savedTodo);
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
 // =====================
-// UPDATE TODO (Edit + Complete)
+// UPDATE TODO (Edit + Complete + Due Date)
 // =====================
 app.put("/todos/:id", async (req, res) => {
   try {
@@ -62,12 +63,12 @@ app.put("/todos/:id", async (req, res) => {
       {
         task: req.body.task,
         completed: req.body.completed,
+        dueDate: req.body.dueDate,
       },
       { new: true }
     );
 
     res.json(updatedTodo);
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -81,9 +82,8 @@ app.delete("/todos/:id", async (req, res) => {
     await Todo.findByIdAndDelete(req.params.id);
 
     res.json({
-      message: "Task deleted successfully"
+      message: "Task deleted successfully",
     });
-
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

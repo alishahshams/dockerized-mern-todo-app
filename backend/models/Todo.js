@@ -10,6 +10,11 @@ const todoSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  dueDate: {
+    type: Date,
+    default: null,
+  },
 });
 
 module.exports = mongoose.model("Todo", todoSchema);
