@@ -46,13 +46,14 @@ app.post("/todos", async (req, res) => {
 
     const savedTodo = await newTodo.save();
     res.json(savedTodo);
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
 // =====================
-// UPDATE TODO
+// UPDATE TODO (Edit + Complete)
 // =====================
 app.put("/todos/:id", async (req, res) => {
   try {
@@ -60,11 +61,13 @@ app.put("/todos/:id", async (req, res) => {
       req.params.id,
       {
         task: req.body.task,
+        completed: req.body.completed,
       },
       { new: true }
     );
 
     res.json(updatedTodo);
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -76,7 +79,11 @@ app.put("/todos/:id", async (req, res) => {
 app.delete("/todos/:id", async (req, res) => {
   try {
     await Todo.findByIdAndDelete(req.params.id);
-    res.json({ message: "Task deleted successfully" });
+
+    res.json({
+      message: "Task deleted successfully"
+    });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
