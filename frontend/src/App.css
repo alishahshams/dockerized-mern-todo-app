@@ -1,60 +1,108 @@
-body {
+vvbody {
+  margin: 0;
   font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  background: linear-gradient(135deg, #74ebd5, #9face6);
 }
-
 
 .container {
-  width: 500px;
-  margin: 50px auto;
+  width: 90%;
+  max-width: 700px;
+  margin: 40px auto;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-
 
 h1 {
   text-align: center;
+  color: #333;
+  margin-bottom: 25px;
 }
-
 
 .input-box {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
-
-input {
+.input-box input[type="text"],
+.input-box input[type="date"] {
   flex: 1;
-  padding: 10px;
+  min-width: 180px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
 }
-
 
 button {
-  padding: 10px 15px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #4f46e5;
+  color: white;
+  font-size: 14px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
+button:hover {
+  background: #3730a3;
+  transform: scale(1.05);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
 
 li {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: space-between;
-  margin-top: 10px;
+  background: #f8f9fa;
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
 }
 
+li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
 
-/* Complete Task */
+li div {
+  flex: 1;
+}
+
 .completed {
   text-decoration: line-through;
-  opacity: 0.6;
+  color: gray;
 }
 
+li button:last-child {
+  background: #dc2626;
+}
 
-/* Checkbox */
-input[type="checkbox"] {
-  flex: none;
-  width: 18px;
-  height: 18px;
+li button:last-child:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 600px) {
+  .input-box {
+    flex-direction: column;
+  }
+
+  .input-box input,
+  .input-box button {
+    width: 100%;
+  }
+
+  li {
+    flex-wrap: wrap;
+  }
 }
