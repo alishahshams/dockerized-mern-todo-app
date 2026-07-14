@@ -1,16 +1,23 @@
 # 🚀 Dockerized MERN Todo App
 
-A full-stack MERN Todo Application built with React.js, Node.js, Express.js, MongoDB, Docker, and Docker Compose.
+A full-stack MERN Todo Application built with **React.js, Node.js, Express.js, MongoDB, Docker, and Docker Compose**.
 
 ## 📌 Features
 
-- Add new tasks
-- Delete tasks
-- MongoDB database integration
-- REST API with Express.js
-- Dockerized Frontend
-- Dockerized Backend
-- Docker Compose support
+- ✅ Add new tasks
+- ✅ Edit existing tasks
+- ✅ Delete tasks
+- ✅ Mark tasks as Complete / Incomplete
+- ✅ Due Date for each task
+- ✅ Completed task strike-through
+- ✅ Responsive and Modern UI
+- ✅ MongoDB database integration
+- ✅ REST API with Express.js
+- ✅ Dockerized Frontend
+- ✅ Dockerized Backend
+- ✅ Docker Compose support
+
+---
 
 ## 🛠️ Technologies Used
 
@@ -21,10 +28,15 @@ A full-stack MERN Todo Application built with React.js, Node.js, Express.js, Mon
 - Mongoose
 - Docker
 - Docker Compose
+- HTML5
+- CSS3
+- JavaScript (ES6)
+
+---
 
 ## 📂 Project Structure
 
-```
+```text
 dockerized-mern-todo-app/
 │── backend/
 │   ├── models/
@@ -42,12 +54,14 @@ dockerized-mern-todo-app/
 │── README.md
 ```
 
+---
+
 ## 🚀 Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/dockerized-mern-todo-app.git
+git clone https://github.com/alishahshams/dockerized-mern-todo-app.git
 ```
 
 Go to the project directory:
@@ -56,45 +70,70 @@ Go to the project directory:
 cd dockerized-mern-todo-app
 ```
 
-Run the application:
+Build and run using Docker:
 
 ```bash
 docker compose up --build
 ```
 
+---
+
 ## 🌐 Application URLs
 
-Frontend:
+Frontend
 
 ```
 http://localhost:3000
 ```
 
-Backend:
+Backend
 
 ```
 http://localhost:5000
 ```
 
+---
+
 ## 📡 API Endpoints
 
-### Get all todos
+### Get All Todos
 
-```
+```http
 GET /todos
 ```
 
-### Add a todo
+### Add Todo
 
-```
+```http
 POST /todos
 ```
 
-### Delete a todo
+### Update Todo (Edit / Complete / Due Date)
 
+```http
+PUT /todos/:id
 ```
+
+### Delete Todo
+
+```http
 DELETE /todos/:id
 ```
+
+---
+
+## ✨ Project Highlights
+
+- Dockerized full-stack MERN application
+- CRUD operations using REST APIs
+- MongoDB database with Mongoose
+- Edit existing tasks
+- Complete/Incomplete task toggle
+- Due Date support
+- Modern responsive user interface
+- Docker Compose for multi-container setup
+
+---
 
 ## 👩‍💻 Author
 
@@ -104,4 +143,4 @@ Bachelor of Telecommunication Engineering
 
 NED University of Engineering & Technology
 
-Interested in DevOps, Docker, Cloud Computing, and Full-Stack Development.
+Interested in **DevOps, Docker, Cloud Computing, MERN Stack, and Full-Stack Development.**
